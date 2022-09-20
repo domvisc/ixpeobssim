@@ -25,7 +25,7 @@ int Ixpeobssim_SafeInit(Tcl_Interp* tclInterp)
         Tcl_PkgProvide(tclInterp, PACKAGE, VERSION);
         createixpeobssimFunctionMap();
         XSModelFunction::updateComponentList
-              ("/data/work/ixpe/ixpeobssim/ixpeobssim/xspec/ixpeobssim_model.dat");
+              ("/home/dom/Desk/Tesi/ixpeobssim/ixpeobssim/xspec/ixpeobssim_model.dat");
         return TCL_OK;
 
 }
