@@ -1,6 +1,10 @@
 from __future__ import print_function, division
 from tkinter import N
 
+import os
+
+from ixpeobssim.utils.matplotlib_ import plt
+from ixpeobssim import IXPEOBSSIM_CONFIG_ASCII
 import ixpeobssim.core.pipeline as pipeline
 import ixpeobssim.config.microquasar_4U1630 as input_model
 from ixpeobssim import PYXSPEC_INSTALLED
@@ -8,7 +12,11 @@ if PYXSPEC_INSTALLED:
     import ixpeobssim.evt.xspec_ as xspec_
 
 
+
 DURATION = 50000.
+expression = 'tbabs*(bbody)' #xspec spectrum model 
+paramsfile = os.path.join(IXPEOBSSIM_CONFIG_ASCII,'4U1630-47_fit_params.csv')
+
 
 def simulate():
     """Run the simulation and fold the events in phase.
@@ -23,35 +31,32 @@ def bin_():
         pipeline.xpbin(*pipeline.file_list(), algorithm=algorithm)
 
 
-def spectro_polarimetric_fit():
+def spectro_polarimetric_fit(expression,paramsfile):
     """Perform a two-tier spectro-polarimetric fit in XSPEC.
     """
     if not PYXSPEC_INSTALLED:
         return
-    
-    expression = 'phabs * (bbody + powerlaw)'
-
-    col_dens = 7.8 #e22
-    bb_temp = 1.38 #kev
-    bb_norm = 158
-    pl_index = 1.7
-    pl_norm = 1
 
     file_list = pipeline.file_list('pha1*')
-    model = '%s * polconst' % expression
-    fit_output = pipeline.xpxspec(*file_list, model=model, plot=True)
-    target = (col_dens, bb_temp, bb_norm,
-              pl_index, pl_norm, input_model.pol_deg,
-              input_model.pol_ang)
-    xspec_.compare_fit_data(fit_output, target)
+    model = '%s * pollin' % expression
+    fit_output = pipeline.xpxspec(*file_list, model=expression, paramsfile=paramsfile, plot=True, error=False)
 
+
+def draw_spectral_model(expression,parameters):
+
+    parameters = xspec_.read_parameter_file(paramsfile)
+    binning, energy, flux, parameter_names = xspec_.sample_spectral_model(expression,parameters,emin=1.,emax=12.,num_points=1000)
+    plt.figure('input model')
+    plt.plot(energy,flux,'o')
+    
 
 
 def run():
     """Run all.
     """
     bin_()
-    spectro_polarimetric_fit()
+    draw_spectral_model(expression,paramsfile)
+    #spectro_polarimetric_fit(expression,paramsfile)
 
 
 
