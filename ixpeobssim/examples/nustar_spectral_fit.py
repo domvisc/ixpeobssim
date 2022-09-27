@@ -11,8 +11,9 @@ s_A = Spectrum('nu80802313002_A_opt')
 s_B = Spectrum('nu80802313002_B_opt')
 
 #m_1 = Model('tbabs*diskbb',setPars=(5.5,1.48,149.))
-m_2 = Model('tbabs*(diskbb+powerlaw)',setPars=(6.,1.45,166.,2.6,0.26))
+m_2 = Model('tbabs*(diskbb+powerlaw)',setPars=(5.8,1.45,164.,2.6,0.25))
 #m_3 = Model('tbabs*bbody',setPars=(7,1))
+#m_4 = Model('tbabs*kerrbb',setPars =(0.,0.,60,4.,1.,15.,1.5,-1.,-1.,1.))
 
 Fit.perform()
 Fit.show()
