@@ -1,6 +1,44 @@
 .. _release_notes:
+
 Release notes
 =============
+
+
+*ixpeobssim (29.1.4) - Tue, 27 Sep 2022 11:45:36 +0200*
+
+* Merging in pull request https://github.com/lucabaldini/ixpeobssim/pull/641
+* Small fix for a matplotlib 3.6.0 incompatibility.
+* Switching to draggable colorbars for two-dimensional histograms.
+* Issue(s) closed:
+      * https://github.com/lucabaldini/ixpeobssim/issues/631
+
+
+*ixpeobssim (29.1.3) - Sat, 24 Sep 2022 21:21:14 +0200*
+
+* Some cosmetics on the public guthub interface.
+
+
+*ixpeobssim (29.1.2) - Sat, 24 Sep 2022 19:09:22 +0200*
+
+* Merging in pull request https://github.com/lucabaldini/ixpeobssim/pull/633
+* Merging in pull request https://github.com/lucabaldini/ixpeobssim/pull/636
+* A few bits of the documentation on RTD fixed, and all references to the
+  old, private repository on bitbucket fixed.
+* Versioning infrastructure refactored to allow for installation via pip.
+* Issue(s) closed:
+      * https://github.com/lucabaldini/ixpeobssim/issues/620
+      * https://github.com/lucabaldini/ixpeobssim/issues/632
+
+
+*ixpeobssim (29.1.1) - Thu, 22 Sep 2022 20:17:42 +0200*
+
+* Merging in pull request https://github.com/lucabaldini/ixpeobssim/pull/630
+* Data file required by a magnetar unit test restored.
+* Path to a CALDB file fixed in order to be able to run xpobssim with
+  the charging option enabled.
+* Issue(s) closed:
+      * https://github.com/lucabaldini/ixpeobssim/issues/619
+      * https://github.com/lucabaldini/ixpeobssim/issues/629
 
 
 *ixpeobssim (29.1.0) - Wed, 21 Sep 2022 21:40:16 +0200*
