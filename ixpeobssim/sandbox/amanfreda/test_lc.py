@@ -80,6 +80,10 @@ def plot_lc(*lcs, label='[2-8] keV', title='LC', draw_saa=False):
                         label='SAA')
     plt.legend()
 
+
+alle_names = ['ixpe01250401_det1_evt2_v03_eselect_lc.fits',
+              'ixpe01250401_det2_evt2_v03_eselect_lc.fits',
+              'ixpe01250401_det3_evt2_v03_eselect_lc.fits']
 highe_names = ['ixpe01250401_det1_evt2_v03_ehigh_lc.fits',
                'ixpe01250401_det2_evt2_v03_ehigh_lc.fits',
                'ixpe01250401_det3_evt2_v03_ehigh_lc.fits']
@@ -87,10 +91,15 @@ lowe_names = ['ixpe01250401_det1_evt2_v03_elow_lc.fits',
               'ixpe01250401_det2_evt2_v03_elow_lc.fits',
               'ixpe01250401_det3_evt2_v03_elow_lc.fits']
 
-lowe_lcs = [xBinnedLightCurve.from_file_list([os.path.join(DATA_FOLDER, file_name)])
-                for file_name in lowe_names]
-highe_lcs = [xBinnedLightCurve.from_file_list([os.path.join(DATA_FOLDER, file_name)])
-                for file_name in highe_names]
+alle_lcs = [xBinnedLightCurve.from_file_list([os.path.join(DATA_FOLDER,
+            file_name)]) for file_name in alle_names]
+lowe_lcs = [xBinnedLightCurve.from_file_list([os.path.join(DATA_FOLDER,
+            file_name)]) for file_name in lowe_names]
+highe_lcs = [xBinnedLightCurve.from_file_list([os.path.join(DATA_FOLDER,
+             file_name)]) for file_name in highe_names]
+
+for lc in alle_lcs[1:]:
+    alle_lcs[0] += lc
 
 for lc in lowe_lcs[1:]:
     lowe_lcs[0] += lc
@@ -98,19 +107,24 @@ for lc in lowe_lcs[1:]:
 for lc in highe_lcs[1:]:
     highe_lcs[0] += lc
 
+apply_exposure_mask(alle_lcs[0], min_exposure=60)
 apply_exposure_mask(highe_lcs[0], min_exposure=60)
 apply_exposure_mask(lowe_lcs[0], min_exposure=60)
 
-rate_lowe = lowe_lcs[0].COUNTS / lowe_lcs[0].EXPOSURE
-rate_highe = highe_lcs[0].COUNTS / highe_lcs[0].EXPOSURE
-rate_err_lowe = lowe_lcs[0].ERROR / lowe_lcs[0].EXPOSURE
-rate_err_highe = highe_lcs[0].ERROR / highe_lcs[0].EXPOSURE
+plt.figure('LC')
+alle_lcs[0].plot(mjd=True)
+
+
+rate_lowe = lowe_lcs[0].rate()
+rate_highe = highe_lcs[0].rate()
+rate_err_lowe = lowe_lcs[0].rate_error()
+rate_err_highe = highe_lcs[0].rate_error()
 
 plt.figure('ratio')
 ratio = rate_lowe/rate_highe
 ratio_err = numpy.sqrt(rate_err_lowe**2 + rate_err_highe**2 * rate_lowe) / rate_highe
 plt.errorbar(lowe_lcs[0].TIME, ratio, yerr=ratio_err, fmt='o',
-             label='[2-4] keV / [5-8] keV')
+             label='[2-3] keV / [5-8] keV')
 plt.grid(True)
 plt.xlabel('MET [s]')
 plt.ylabel('rate ratio')
