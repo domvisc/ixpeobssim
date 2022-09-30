@@ -13,22 +13,22 @@ if PYXSPEC_INSTALLED:
 
 
 
-DURATION = 50000.
-expression = 'tbabs*(bbody)' #xspec spectrum model 
+DURATION = 460000.
+expression = 'tbabs*(diskbb+powerlaw)' #xspec spectrum model 
 paramsfile = os.path.join(IXPEOBSSIM_CONFIG_ASCII,'4U1630-47_fit_params.csv')
 
 
 def simulate():
     """Run the simulation and fold the events in phase.
     """
-    pipeline.xpobssim(duration=DURATION)
+    pipeline.xpobssim(duration=DURATION,configfile='/home/dom/Desk/Tesi/ixpeobssim/ixpeobssim/config/microquasar_4U1630.py',overwrite =True)
 
 
 def bin_():
     """Create the pha1 files.
     """
-    for algorithm in ['PHA1', 'PHA1Q', 'PHA1U']:
-        pipeline.xpbin(*pipeline.file_list(), algorithm=algorithm)
+    for algorithm in ['PCUBE']:
+        pipeline.xpbin(*pipeline.file_list(), algorithm=algorithm, irfname = 'ixpe:obssim:v11', overwrite = True, ebinalg = 'LIN' , ebins = 4)
 
 
 def spectro_polarimetric_fit(expression,paramsfile):
@@ -54,8 +54,9 @@ def draw_spectral_model(expression,parameters):
 def run():
     """Run all.
     """
+    simulate()
     bin_()
-    draw_spectral_model(expression,paramsfile)
+    #draw_spectral_model(expression,paramsfile)
     #spectro_polarimetric_fit(expression,paramsfile)
 
 

@@ -11,6 +11,7 @@ from ixpeobssim.utils.logging_ import logger
 from ixpeobssim.utils.matplotlib_ import plt, setup_gca
 from ixpeobssim.utils.units_ import ergcms_to_mcrab
 from ixpeobssim.srcmodel.polarization import constant
+from ixpeobssim.srcmodel.spectrum import xXspecModel
 
 __model__ = file_path_to_model_name(__file__)
 
@@ -20,9 +21,9 @@ SRC_DEC = -47.393
 
 def pol_deg(E,t=None,ra=None,dec=None):
     """Simple linear polarization model from quick look data"""
-    return 0.044 + 0.0076*E
+    return 0.0376 + 0.0100*E
 
-pol_ang = constant(numpy.radians(60))
+pol_ang = constant(numpy.radians(17.65))
 
 
 def _parse_spec(file_name):
@@ -36,8 +37,14 @@ def _parse_spec(file_name):
     spec_spline = xInterpolatedUnivariateLogSpline(energy, flux, k=1, **fmtaxis.spec)
     return spec_spline
 
-spec_spline = _parse_spec('4U1630-47_spectrum.csv')
-spec = lambda E, t=None: spec_spline(E)
+# spec_spline = _parse_spec('4U1630-47_spectrum.csv') #use only with sampled spectrum
+
+#parfile = 'tbabs_diskbb_pl_parfile.par'
+parfile = 'tbabs_diskbb_parfile.par'
+
+model = xXspecModel.from_file(os.path.join(IXPEOBSSIM_CONFIG_ASCII,parfile))
+spec = lambda E, t=None: model(E)
+
 source = xPointSource(SRC_NAME,SRC_RA,SRC_DEC,spec,pol_deg,pol_ang)
 
 ROI_MODEL = xROIModel(SRC_RA,SRC_DEC,source)

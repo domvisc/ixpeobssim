@@ -1,0 +1,10 @@
+# This file represents an example of a spectrum parameter file for XSPEC support
+model       tbabs*diskbb
+COMP1       phabs
+nH          5.503
+COMP2       diskbb
+Temp        1.48593
+norm        148.030
+
+
+
