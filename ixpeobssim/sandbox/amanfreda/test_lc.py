@@ -114,21 +114,6 @@ apply_exposure_mask(lowe_lcs[0], min_exposure=60)
 plt.figure('LC')
 alle_lcs[0].plot(mjd=True)
 
-
-rate_lowe = lowe_lcs[0].rate()
-rate_highe = highe_lcs[0].rate()
-rate_err_lowe = lowe_lcs[0].rate_error()
-rate_err_highe = highe_lcs[0].rate_error()
-
-plt.figure('ratio')
-ratio = rate_lowe/rate_highe
-ratio_err = numpy.sqrt(rate_err_lowe**2 + rate_err_highe**2 * rate_lowe) / rate_highe
-plt.errorbar(lowe_lcs[0].TIME, ratio, yerr=ratio_err, fmt='o',
-             label='[2-3] keV / [5-8] keV')
-plt.grid(True)
-plt.xlabel('MET [s]')
-plt.ylabel('rate ratio')
-plt.legend()
 #plot_lc(*highe_names, label='[5-8] keV', title=None, draw_saa=False)
 #plot_lc(*lowe_names, label='[2-3] keV', title=None, draw_saa=False)
 
