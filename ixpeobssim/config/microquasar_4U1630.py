@@ -39,8 +39,8 @@ def _parse_spec(file_name):
 
 # spec_spline = _parse_spec('4U1630-47_spectrum.csv') #use only with sampled spectrum
 
-#parfile = 'tbabs_diskbb_pl_parfile.par'
-parfile = 'tbabs_diskbb_parfile.par'
+parfile = 'tbabs_diskbb_pl_parfile.par'
+#parfile = 'tbabs_diskbb_parfile.par'
 
 model = xXspecModel.from_file(os.path.join(IXPEOBSSIM_CONFIG_ASCII,parfile))
 spec = lambda E, t=None: model(E)
