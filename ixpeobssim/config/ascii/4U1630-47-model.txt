@@ -1,0 +1,10 @@
+# Spectropolarimetric model for 4U1630-47 fitting
+model       tbabs*(diskbb+powerlaw)
+COMP1       phabs
+nH          5.86176
+COMP2       diskbb
+Temp        1.45227
+norm        164.968
+COMP2       powerlaw
+PhoIndex    2.63272
+norm        0.259614
