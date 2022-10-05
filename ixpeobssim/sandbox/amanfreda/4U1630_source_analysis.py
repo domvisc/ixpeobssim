@@ -67,6 +67,7 @@ def draw_hardness_ratio(lowe_lc, highe_lc, label=None, mjd=True):
     plt.grid(True)
     if label is not None:
         plt.legend()
+    return ratio, ratio_err
 
 def draw_time_boundaries(boundaries, mjd=True):
     if mjd:
@@ -129,7 +130,6 @@ def spectro_polarimetric_fit(expression, params, *pha_files):
     pipeline.xpxspec(*pha_files, model=expression,
                      params=params, error=False)
 
-
 def run():
     """
     """
@@ -149,8 +149,8 @@ def run():
                                       label=elabel(3., 5.),tbins=tbins)
     high_energy_lc = build_light_curve(*hig_energy_files, suffix='ehigh',
                                       label=elabel(5., 8.),tbins=tbins)
-    draw_hardness_ratio(low_energy_lc, high_energy_lc,
-                        label='[5-8] keV / [2-3] keV', mjd=True)
+    hr, hr_err = draw_hardness_ratio(low_energy_lc, high_energy_lc,
+                                     label='[5-8] keV / [2-3] keV', mjd=True)
     # Divide the dataset in four time regions, based on the hardnessa ratio:
     t = all_energy_lc.TIME
     boundaries = [TSTART, 178288000., 178347500., 178742060., TSTOP]
