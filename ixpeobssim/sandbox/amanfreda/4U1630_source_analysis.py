@@ -74,7 +74,7 @@ def draw_time_boundaries(boundaries, mjd=True):
     for i, (t0, t1) in enumerate(zip(boundaries[:-1], boundaries[1:])):
         plt.gca().axvspan(t0, t1, alpha=0.2, color=color_wheel_mpr(i))
 
-def space_select(*file_list, innerrad=0., rad=20., suffix='spsel'):
+def space_select(*file_list, innerrad=0., rad=9., suffix='spsel'):
     return pipeline.xpselect(*file_list, suffix=suffix, innerrad=innerrad,
                              rad=rad)
 
@@ -134,15 +134,19 @@ def run():
     """
     """
     tbins = 100
-    all_energy_files = energy_select(*FILE_LIST, suffix='eall', emin=2., emax=8.)
-    low_energy_files = energy_select(*FILE_LIST, suffix='elow', emin=2., emax=3.)
-    hig_energy_files = energy_select(*FILE_LIST, suffix='ehigh', emin=5., emax=8.)
+    sp_sel_files = space_select(*FILE_LIST, rad=4.)
+    all_energy_files = energy_select(*sp_sel_files, suffix='eall', emin=2., emax=8.)
+    low_energy_files = energy_select(*sp_sel_files, suffix='elow', emin=2., emax=3.)
+    mid_energy_files = energy_select(*sp_sel_files, suffix='emid', emin=3., emax=5.)
+    hig_energy_files = energy_select(*sp_sel_files, suffix='ehigh', emin=5., emax=8.)
     all_energy_lc = build_light_curve(*all_energy_files, suffix='eall',
                                       label=elabel(2., 8.), tbins=tbins)
     t = all_energy_lc.TIME
     boundaries = [min(t), 178288000., 178347500., 178742060., max(t)]
     low_energy_lc = build_light_curve(*low_energy_files, suffix='elow',
                                       label=elabel(2., 3.),tbins=tbins)
+    mid_energy_lc = build_light_curve(*mid_energy_files, suffix='emid',
+                                      label=elabel(3., 5.),tbins=tbins)
     high_energy_lc = build_light_curve(*hig_energy_files, suffix='ehigh',
                                       label=elabel(5., 8.),tbins=tbins)
     draw_hardness_ratio(low_energy_lc, high_energy_lc,
@@ -150,7 +154,7 @@ def run():
     # Divide the dataset in four time regions, based on the hardnessa ratio:
     t = all_energy_lc.TIME
     boundaries = [TSTART, 178288000., 178347500., 178742060., TSTOP]
-    draw_time_boundaries(boundaries, mjd=True)
+    #draw_time_boundaries(boundaries, mjd=True)
     select_time_regions(*all_energy_files, boundaries=boundaries)
     spectral_model = xXspecModel.from_file(os.path.join(
                          IXPEOBSSIM_CONFIG_ASCII, 'tbabs_diskbb_parfile.par'))
